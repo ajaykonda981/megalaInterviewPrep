@@ -1,0 +1,123 @@
+1. What is Web API?
+Answer: Web API is a framework that allows you to build HTTP-based services that can be consumed by a wide range of clients, including browsers, mobile devices, and other servers. These are some of HTTP methods GET, POST, PUT, and DELETE,
+2. REST vs. RESTful
+Answer: REST (Representational State Transfer) is an architectural style that defines a set of constraints for creating web services. RESTful refers to web services that adhere to the REST principles. A RESTful service is stateless, uses standard HTTP methods, and operates on resources identified by URIs.
+3. Routing in Web API
+Answer: Routing in Web API is the process of directing an HTTP request to the appropriate controller and action method. In .NET Core, routing is configured using route templates that match the incoming URL to a specific controller and action. There are two types of routing in Web API: conventional routing and attribute routing.
+4. Attribute Routing vs. Conventional Routing
+Answer:
+Conventional Routing: Defines routes in a centralized manner, typically in the Startup.cs file, using patterns to map URLs to controllers and actions, but we have never used conventional routing we always went for attribute based routing.
+Attribute Routing: Allows you to define routes directly on the controller and action methods using attributes like [Route("api/[controller]")] and [HttpGet("{id}")]. This gives you more control and flexibility over routing.
+5. Action Results and Return Types
+Answer: Action results in Web API determine the response that the API sends to the client. Common return types include:
+IActionResult: An interface that represents various HTTP responses, we have to use methods like Ok(), BadRequest(), NotFound() while returning this is mandatory
+ActionResult<T>: Allows for both strong typing and flexibility, returning data along with an HTTP status code, it can return like return ok(), or return List<customers>
+JsonResult: Returns JSON-formatted data.
+ContentResult: Returns plain text.
+Ok(), NotFound(), BadRequest(): Built-in methods to return common HTTP responses.
+6. Parameter Binding ([FromBody], [FromQuery], etc.)
+Answer: Parameter binding in Web API refers to the process of mapping HTTP request data to action method parameters. Common attributes include:
+[FromBody]: Binds the request body to a method parameter.
+[FromQuery]: Binds query string values to a method parameter.
+https://yourdomain.com/api/customers?Id=123&CustomerName=JohnDoe&Email=johndoe@example.com
+[FromHeader]: Binds a value from the request header to a method parameter. We bind JWT token in from header
+ 
+7. HTTP Methods
+Answer: HTTP methods define the type of operation that the API should perform. The most common methods are:
+GET: Retrieves data from the server.
+POST: Submits data to the server to create a resource.
+PUT: Updates a resource on the server.
+DELETE: Removes a resource from the server.
+PATCH: Partially updates a resource on the server.
+8. Asynchronous Programming with async/await
+Answer: Asynchronous programming in .NET Core is done using async and await keywords, which allow you to perform non-blocking operations. This is especially useful in Web APIs to avoid blocking threads while waiting for I/O operations, such as database queries or external API calls, thereby improving scalability and performance.
+9. Dependency Injection
+Answer: Dependency Injection (DI) is a design pattern that allows a class to receive its dependencies from axn external source rather than creating them itself. In .NET Core, DI is built-in, and services are registered in the DI container, which then resolves and injects them into your classes, such as controllers.
+10. Configuring Services in Startup.cs
+Answer: Services in .NET Core are configured in the ConfigureServices method in the Startup.cs file. This method is used to register services with the dependency injection container. For example, you might add a database context, an authentication scheme, or custom services.
+11. Scoped, Transient, and Singleton Lifetimes
+Answer:
+Transient: A new instance of the service is created each time it is requested.
+Scoped: A new instance of the service is created once per request.
+Singleton: A single instance of the service is created and shared across the entire application.
+12. Injecting Services into Controllers
+Answer: Services are injected into controllers via constructor injection. The services are automatically resolved from the DI container when the controller is instantiated.
+13. Authentication and Authorization
+Answer: Authentication verifies the identity of a user, while authorization determines what resources a user is allowed to access. .NET Core provides built-in support for both, typically through middleware components like UseAuthentication and UseAuthorization.
+14. JWT Bearer Authentication
+Answer: JWT (JSON Web Token) Bearer authentication is a method of securing APIs using tokens. A token is issued to the client upon successful authentication, which the client must include in the Authorization header of subsequent requests. This token contains claims that can be used for authorization.
+15. Role-Based and Policy-Based Authorization
+Answer:
+Role-Based Authorization: Users are assigned roles, and access to resources is restricted based on these roles.
+Policy-Based Authorization: Allows more granular control by defining policies based on specific requirements, such as claims, custom requirements, or roles.
+16. Securing API Endpoints
+Answer: Securing API endpoints involves implementing authentication, authorization, and ensuring data protection. Common practices include using HTTPS, validating inputs, using strong authentication mechanisms like OAuth2/JWT, and limiting access to sensitive endpoints based on user roles or policies.
+17. Content Negotiation
+Answer: Content negotiation is the process by which the server selects the appropriate response format (e.g., JSON, XML) based on the client's request headers, such as Accept. In .NET Core Web API, content negotiation is handled automatically.
+           Eg: content-type: application/json in headers 
+18. Global Exception Handling & Custom Exception Filters
+Answer:
+Global Exception Handling: Centralized handling of exceptions, typically implemented using middleware, to ensure consistent error responses across the API.
+Custom Exception Filters: Allows you to catch and handle exceptions at the controller or action level by creating and applying custom exception filters.
+19. API Versioning Strategies (URL Path, Query String, Headers)
+Answer: API versioning allows you to manage changes to your API without breaking existing clients. Common strategies include:
+URL Path: Version is specified in the URL, e.g., /api/v1/products.
+Query String: Version is passed as a query parameter, e.g., /api/products?version=1.
+Headers: Version is specified in the HTTP headers, e.g., api-version: 1.0.
+20. Cross-Origin Resource Sharing (CORS)
+Answer: 
+If any application running on other port numbers rather than its own port number  which have to use .net core web api, they have to hit .net core web api port (eg: http:localhost:5000/api/Student → this is a get method ), .net core will give cors issue, to enable it we have to add cors policy in middleware like this 
+
+builder.Services.AddCors(options => { options.AddPolicy("AllowSpecificOrigins", policy => { policy.WithOrigins("https://example.com", "https://anotherdomain.com") // Specify allowed origins .AllowAnyHeader() // Allow any header .AllowAnyMethod(); // Allow any HTTP method }); options.AddPolicy("AllowAll", policy => { policy.AllowAnyOrigin() .AllowAnyHeader() .AllowAnyMethod(); }); });
+
+This has to be added in middleware
+
+app.UseCors("AllowSpecificOrigins");
+
+21. Integrating Logging
+Answer: Logging in .NET Core is integrated through the built-in logging framework, which supports various logging providers like Console, Debug, EventLog, and third-party libraries like Serilog and NLog. Logging is configured in Startup.cs and can be used to track application behavior, errors, and performance metrics.
+22. Deployment and Hosting
+Answer: Deployment and hosting of .NET Core Web API can be done on various platforms, including cloud services like Azure, on-premise servers, or containerized environments using Docker. The deployment process includes setting up the environment, configuring the application, and using CI/CD pipelines to automate the deployment.
+23. Hosting Web API in IIS, Kestrel
+Answer:
+Kestrel: The default web server for .NET Core, Kestrel is lightweight and high-performance, suitable for both development and production, especially when used behind a reverse proxy like IIS or Nginx.
+IIS (Internet Information Services): On Windows, you can host .NET Core Web APIs in IIS using the ASP.NET Core Module (ANCM) to proxy requests to Kestrel. This setup allows you to leverage IIS features like process management, security, and load balancing.
+25. how do you achieve Security authentication
+   1. Using JWT token (JSON Web Token)
+   2. JWt token consists of header, payload, signature, where header and payload can be decrypted and signature can't be decrypted
+   3. we use Hmacsha256 algorithm for JWT
+   4. We create JWT token in .Net core API using header+ payload+secretkey, these secret key can be any string
+   5. we return this JWT token to users, every time he hits our api, he has to pass this jwt token in header of particular http request
+   5. once user passes this JWT token, API decrypts header and payload from token user passed and creates another token in api side using header, payload passed by user
+  	in header section + using secret key which ptoject has, if both tokens match then he is allowed to use api 
+       select * from users where userid = '' and pwd = ''
+25. How do you Secure API endpoint?
+
+          Using [Authorize] attribute and JWT token mechanism
+	[Authorize] attribute have roles , we match it with payload.
+	 [Authorize(Roles = "Manager")]
+ [HttpPut("{id}")]
+ public string ApproveLeave(){}
+
+26. How do you use authentication using jwt token .net core web api 8
+       
+         Install Nuget packages
+         Use Middleware 
+         Generate jwt token
+         Protect api endpoints
+
+27. What is Middle ware?
+
+	Pipeline - sequence of request handling
+	app.UseRouting();
+	app.UseAuthentication();
+	app.UseAuthorization();
+	app.UseExceptionHandler("/error");
+
+28. How do you handle exception?
+
+	Using filters - exception handling filters
+	Some times try catch
+
+	
+
